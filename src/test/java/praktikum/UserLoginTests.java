@@ -1,44 +1,13 @@
 package praktikum;
 
 import io.qameta.allure.Description;
-import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import net.datafaker.Faker;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import praktikum.User.UserClient;
-import praktikum.models.User;
 import praktikum.models.UserCreds;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static praktikum.User.UserGenerator.randomUser;
-import static praktikum.UserCreationTests.createUser;
-import static praktikum.UserCreationTests.deleteUser;
-
-public class UserLoginTests {
-
-    private static final String BASE_URI = "https://stellarburgers.nomoreparties.site";
-    private static UserClient userClient = new UserClient();
-    private static User randomUser = randomUser();
-    private static String userAccessToken;
-
-    @Step("login User And Get User Access Token")
-    static String loginUserAndGetUserAccessToken(User user) {
-        UserCreds userCreds = new UserCreds();
-        Response loginResponse = userClient.loginUser(userCreds.credsFrom(user));
-        assertEquals("Пользователь не залогинен", 200, loginResponse.statusCode());
-        assertNotNull("Неверное тело ответа", loginResponse.path("accessToken"));
-        userAccessToken = loginResponse.path("accessToken").toString().substring(7);
-        return userAccessToken;
-    }
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = BASE_URI;
-    }
+public class UserLoginTests extends BaseTest {
 
     @Test
     @DisplayName("login Existent User With All Required Fields Returns User Access Token")
@@ -81,13 +50,5 @@ public class UserLoginTests {
         assertEquals("email or password are incorrect", loginResponseWithWrongPassword.path("message"));
 
         userAccessToken = loginUserAndGetUserAccessToken(randomUser);
-    }
-
-
-    @After
-    public void tearDown() {
-        if (userAccessToken != null) {
-            deleteUser(userAccessToken); // удаление курьера
-        }
     }
 }
