@@ -1,11 +1,11 @@
 package praktikum.models;
 
+import lombok.Setter;
+
+@Setter
 public class UserCreds {
     private String email;
     private String password;
-
-    public UserCreds() {
-    }
 
     public UserCreds credsFrom(User user) {
         this.email = user.getEmail();
@@ -21,12 +21,5 @@ public class UserCreds {
     public UserCreds passwordFrom(User user) {
         this.password = user.getPassword();
         return this;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

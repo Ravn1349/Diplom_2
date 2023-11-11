@@ -5,7 +5,9 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.Test;
 import praktikum.models.Order;
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.Assert.*;
+
 public class OrderCreationTests extends BaseTest {
     @Test
     @DisplayName("create Order With Authorization Returns Order Number")
@@ -17,7 +19,7 @@ public class OrderCreationTests extends BaseTest {
         order.addIngredients(new String[]{"61c0c5a71d1f82001bdaaa6d","61c0c5a71d1f82001bdaaa6f"});
         Response createOrderResponse = orderClient.createOrder(userAccessToken, order);
         assertEquals("Неверный статус код", 200, createOrderResponse.statusCode());
-        assertEquals(true, createOrderResponse.path("success"));
+        assertTrue(createOrderResponse.path("success"));
         int orderNumber = createOrderResponse.path("order.number");
     }
 
@@ -31,7 +33,7 @@ public class OrderCreationTests extends BaseTest {
         order.addIngredients(new String[]{"61c0c5a71d1f82001bdaaa6d","61c0c5a71d1f82001bdaaa6f"});
         Response createOrderResponse = orderClient.createOrderWithoutAuthorization(order);
         assertEquals("Неверный статус код", 200, createOrderResponse.statusCode()); //
-        assertEquals(true, createOrderResponse.path("success")); // В документации API сказано, что только авторизованные пользователи могут делать заказы. Опираюсь на фактическое поведение, т.к. по условиям задания тесты должны проходить.
+        assertTrue(createOrderResponse.path("success")); // В документации API сказано, что только авторизованные пользователи могут делать заказы. Опираюсь на фактическое поведение, т.к. по условиям задания тесты должны проходить.
         int orderNumber = createOrderResponse.path("order.number"); //
     }
 
@@ -44,7 +46,7 @@ public class OrderCreationTests extends BaseTest {
         Order order = new Order();
         Response createOrderResponse = orderClient.createOrder(userAccessToken, order);
         assertEquals("Неверный статус код", 400, createOrderResponse.statusCode());
-        assertEquals(false, createOrderResponse.path("success"));
+        assertFalse(createOrderResponse.path("success"));
         assertEquals("Ingredient ids must be provided", createOrderResponse.path("message"));
     }
 

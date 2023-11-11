@@ -7,6 +7,8 @@ import net.datafaker.Faker;
 import org.junit.Test;
 import praktikum.models.UserCreds;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 public class UserLoginTests extends BaseTest {
 
     @Test
@@ -29,7 +31,7 @@ public class UserLoginTests extends BaseTest {
         userCredsWithWrongEmail.setEmail(new Faker().internet().emailAddress());
         Response loginResponseWithWrongEmail = userClient.loginUser(userCredsWithWrongEmail);
         assertEquals("Неверный статус код", 401, loginResponseWithWrongEmail.statusCode());
-        assertEquals(false, loginResponseWithWrongEmail.path("success"));
+        assertFalse(loginResponseWithWrongEmail.path("success"));
         assertEquals("email or password are incorrect", loginResponseWithWrongEmail.path("message"));
 
         userAccessToken = loginUserAndGetUserAccessToken(randomUser);
@@ -46,7 +48,7 @@ public class UserLoginTests extends BaseTest {
         userCredsWithWrongPassword.setPassword(new Faker().internet().password());
         Response loginResponseWithWrongPassword = userClient.loginUser(userCredsWithWrongPassword);
         assertEquals("Неверный статус код", 401, loginResponseWithWrongPassword.statusCode());
-        assertEquals(false, loginResponseWithWrongPassword.path("success"));
+        assertFalse(loginResponseWithWrongPassword.path("success"));
         assertEquals("email or password are incorrect", loginResponseWithWrongPassword.path("message"));
 
         userAccessToken = loginUserAndGetUserAccessToken(randomUser);

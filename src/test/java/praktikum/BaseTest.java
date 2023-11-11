@@ -10,8 +10,7 @@ import praktikum.User.UserClient;
 import praktikum.models.User;
 import praktikum.models.UserCreds;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static praktikum.User.UserGenerator.*;
 import static praktikum.User.UserGenerator.randomUserWithoutName;
 
@@ -20,7 +19,6 @@ public class BaseTest {
     static final String BASE_URI = "https://stellarburgers.nomoreparties.site";
     static UserClient userClient = new UserClient();
     static OrderClient orderClient = new OrderClient();
-
     static User randomUser = randomUser();
     static String userAccessToken;
 
@@ -28,7 +26,7 @@ public class BaseTest {
     static Response createUser(User user) {
         Response CreationResponse = userClient.createUser(user);
         assertEquals("Неверный статус код создания курьера", 200, CreationResponse.statusCode()); // пользователя можно создать передав в ручку все обязательные поля, запрос возвращает правильный код ответа
-        assertEquals("Неверное тело ответа", true, CreationResponse.path("success")); // успешный запрос возвращает success: true;
+        assertTrue("Неверное тело ответа", CreationResponse.path("success")); // успешный запрос возвращает success: true;
         return CreationResponse;
     }
 

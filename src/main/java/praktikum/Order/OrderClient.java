@@ -43,5 +43,4 @@ public class OrderClient {
                 .when()
                 .get(CREATE_URL);
     }
-
 }

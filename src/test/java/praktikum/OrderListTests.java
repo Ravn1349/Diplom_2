@@ -4,8 +4,9 @@ import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+
+import static org.junit.Assert.*;
+
 public class OrderListTests extends BaseTest{
 
     @Test
@@ -27,7 +28,7 @@ public class OrderListTests extends BaseTest{
         userAccessToken = loginUserAndGetUserAccessToken(randomUser);
         Response getUserOrderListResponse = orderClient.getUserOrderListWithoutAuthorization();
         assertEquals("Неверный статус код", 401, getUserOrderListResponse.statusCode());
-        assertEquals(false, getUserOrderListResponse.path("success"));
+        assertFalse(getUserOrderListResponse.path("success"));
         assertEquals("You should be authorised", getUserOrderListResponse.path("message"));
     }
 }

@@ -24,11 +24,11 @@ public class UserDataTests extends BaseTest{
         UserData newUserData = new UserData().dataFrom(newUser);
         Response updateUserDataResponse = userClient.updateUserData(userAccessToken, newUserData);
         assertEquals("Неверный статус код обновления данных о пользователе", 200, updateUserDataResponse.statusCode());
-        assertEquals(true, updateUserDataResponse.path("success"));
+        assertTrue(updateUserDataResponse.path("success"));
         Map< String , String > responseUserData = updateUserDataResponse.path("user");
         assertEquals(newUserData, new Gson().fromJson(responseUserData.toString(), UserData.class));
-
-        userAccessToken = loginUserAndGetUserAccessToken(newUser.withPassword(randomUser.getPassword()));
+        newUser.setPassword(randomUser.getPassword());
+        userAccessToken = loginUserAndGetUserAccessToken(newUser);
     }
 
     @Test
@@ -42,11 +42,12 @@ public class UserDataTests extends BaseTest{
         UserData newUserData = new UserData().dataFrom(newUser);
         Response updateUserDataResponse = userClient.updateUserDataWithoutAuthorization(newUserData);
         assertEquals("Неверный статус код обновления данных о пользователе", 401, updateUserDataResponse.statusCode());
-        assertEquals(false, updateUserDataResponse.path("success"));
+        assertFalse(updateUserDataResponse.path("success"));
         assertEquals("You should be authorised", updateUserDataResponse.path("message"));
 
         UserCreds userCreds = new UserCreds();
-        Response newUserDataLoginresponse = userClient.loginUser(userCreds.credsFrom(newUser.withPassword(randomUser.getPassword())));
-        assertEquals("Неверный статус код обновления данных о пользователе", 401, newUserDataLoginresponse.statusCode());
+        newUser.setPassword(randomUser.getPassword());
+        Response newUserDataLoginResponse = userClient.loginUser(userCreds.credsFrom(newUser));
+        assertEquals("Неверный статус код обновления данных о пользователе", 401, newUserDataLoginResponse.statusCode());
     }
 }

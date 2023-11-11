@@ -5,6 +5,8 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 public class UserCreationTests extends BaseTest {
 
     @Test
@@ -26,7 +28,7 @@ public class UserCreationTests extends BaseTest {
 
         Response repetitiveLoginResponse = userClient.createUser(randomUser);
         assertEquals("Неверный статус код", 403, repetitiveLoginResponse.statusCode());
-        assertEquals("Неверное тело ответа", false, repetitiveLoginResponse.path("success"));
+        assertFalse("Неверное тело ответа", repetitiveLoginResponse.path("success"));
         assertEquals("Неверное тело ответа", "User already exists", repetitiveLoginResponse.path("message"));
     }
 
@@ -36,17 +38,17 @@ public class UserCreationTests extends BaseTest {
     public void createUserWithAnyFieldAbsentReturnsError() {
         Response noLoginCreationResponse = createUserWithoutEmail();
         assertEquals("Неверный статус код", 403, noLoginCreationResponse.statusCode());
-        assertEquals("Неверное тело ответа", false, noLoginCreationResponse.path("success"));
+        assertFalse("Неверное тело ответа", noLoginCreationResponse.path("success"));
         assertEquals("Неверное тело ответа", "Email, password and name are required fields", noLoginCreationResponse.path("message"));
 
         Response noPasswordCreationResponse = createUserWithoutPassword();
         assertEquals("Неверный статус код", 403, noPasswordCreationResponse.statusCode());
-        assertEquals("Неверное тело ответа", false, noPasswordCreationResponse.path("success"));
+        assertFalse("Неверное тело ответа", noPasswordCreationResponse.path("success"));
         assertEquals("Неверное тело ответа", "Email, password and name are required fields", noLoginCreationResponse.path("message"));
 
         Response noNameCreationResponse = createUserWithoutName();
         assertEquals("Неверный статус код", 403, noNameCreationResponse.statusCode());
-        assertEquals("Неверное тело ответа", false, noNameCreationResponse.path("success"));
+        assertFalse("Неверное тело ответа", noNameCreationResponse.path("success"));
         assertEquals("Неверное тело ответа", "Email, password and name are required fields", noLoginCreationResponse.path("message"));
     }
 }
